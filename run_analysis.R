@@ -13,16 +13,16 @@ setwd("~/Coursera/Getting and Cleaning Data/CourseProject/UCI HAR Dataset/")
 #Training Data
 y_train <- read.table("./train/y_train.txt", quote="\"")
 X_train <- read.table("./train/X_train.txt", quote="\"")
+subject_train <- read.table("./train/subject_train.txt", quote="\"")
+
 
 #Test Data
 y_test <- read.table("./test/y_test.txt", quote="\"")
 X_test <- read.table("./test/X_test.txt", quote="\"")
+subject_test <- read.table("./test/subject_test.txt", quote="\"")
 
 activity_labels <- read.table("activity_labels.txt", quote="\"")
 features <- read.table("features.txt", quote="\"")
-subject_train <- read.table("./train/subject_train.txt", quote="\"")
-subject_test <- read.table("./test/subject_test.txt", quote="\"")
-
 
 #Standard deviation features:
 stddev_features=features$V1[grep("std",features$V2)]
@@ -44,16 +44,20 @@ names(X_train_subset)=colNames
 X_test_subset=subset(X_test, , select=cols_to_get)
 names(X_test_subset)=colNames
 
-#Add factor to ID observations as training data
-X_train_subset$testtrain="train"
-X_test_subset$testtrain="test"
+# #Add factor to ID observations as training data
+# X_train_subset$testtrain="train"
+# X_test_subset$testtrain="test"
 
 #Map the activity names and add factor
-activityNames=merge(activity_labels,y_train)
-X_train_subset$activity=activityNames$V2
+activityNames=sapply(y_train, function(x) {
+    activity_labels$V2[y_train$V1]})
 
-activityNames=merge(activity_labels,y_test)
-X_test_subset$activity=activityNames$V2
+X_train_subset$activity=activityNames[,1]
+
+activityNames=sapply(y_test, function(x) {
+  activity_labels$V2[y_test$V1]})
+
+X_test_subset$activity=activityNames[,1]
 
 #Add the subject Ids
 X_train_subset$subjectId=subject_train$V1
@@ -62,8 +66,6 @@ X_test_subset$subjectId=subject_test$V1
 #Combined training and test data into one dataset
 combinedDataset= merge(X_train_subset,X_test_subset,all=TRUE)
 
-setwd(origDir)
-
 #Clean up - removing all data but the combinedDataset
 removelist=ls()
 #running again to capture removelist!
@@ -71,4 +73,7 @@ removelist=ls()
 removelist=removelist[removelist != "combinedDataset"]
 rm(list=removelist)
 
+#Get Averages for each subject
+results=ddply(combinedDataset,.(subjectId,activity),numcolwise(mean))
 
+setwd(origDir)
