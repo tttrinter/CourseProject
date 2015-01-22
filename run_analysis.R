@@ -7,8 +7,8 @@
 # Appropriately labels the data set with descriptive variable names. 
 # From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
 
-origDir=getwd()
-setwd("~/Coursera/Getting and Cleaning Data/CourseProject/UCI HAR Dataset/")
+#origDir=getwd()
+#setwd("~/Coursera/Getting and Cleaning Data/CourseProject/UCI HAR Dataset/")
 
 #Training Data
 y_train <- read.table("./train/y_train.txt", quote="\"")
@@ -74,6 +74,7 @@ removelist=removelist[removelist != "combinedDataset"]
 rm(list=removelist)
 
 #Get Averages for each subject
+library(plyr)
 results=ddply(combinedDataset,.(subjectId,activity),numcolwise(mean))
 
-setwd(origDir)
+#setwd(origDir)
