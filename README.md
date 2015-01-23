@@ -1,4 +1,5 @@
 # CourseProject
+## How the Script Works
 Coursera-DataScience -DataGathering Course Project
 This repository contains the data files and R scripts for the course project for the Coursera class on Getting and Cleaning Data.
 
@@ -31,7 +32,7 @@ These files are combined into the combinedDataset with the following steps:
 
 The final answer is in the results.txt file in the same folder and consists of a matrix with the first and second columns as factors for the subjectId and activity respectively.  The following 79 columns represent all of the different measurements that contained std or mean in the name.  The data then represents the average value for each test subject and activity along all of the std and mean measurements.
 
-# Code Book - in order of appearance
+## Code Book - in order of appearance
 * y_train :: vector with the activity_ids for each obeservatioin in the X_train data frame
 * X_train :: all of the measurements for the training data
 * subject_train :: vector with the subject ids for ever observation in the training data.
